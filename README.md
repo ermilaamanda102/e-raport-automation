@@ -1,31 +1,51 @@
 # E-Raport Automation Testing
 
-Automated functional and end-to-end testing for an Electronic Report Card (E-Raport) web application using Playwright, JavaScript, and the Page Object Model (POM) design pattern.
+Proyek pengujian otomatis (*Automation Testing*) pada aplikasi E-Raport (Rapor Elektronik) menggunakan Playwright, JavaScript, dan metode Page Object Model (POM).
 
-## Project Overview
+## 1. Deskripsi Proyek
 
-This repository contains Playwright test automation for selected features of an E-Raport web application. The tests are organized by application module, while reusable page locators and actions are maintained in separate page classes.
+E-Raport Automation Testing merupakan proyek pengujian perangkat lunak yang bertujuan untuk mengotomatisasi pengujian fungsional pada aplikasi Rapor Elektronik.
 
-## Objectives
+Pengujian dilakukan menggunakan Playwright untuk memastikan fitur-fitur aplikasi berjalan sesuai dengan kebutuhan dan fungsinya.
 
-- Automate functional checks for important E-Raport features.
-- Verify user flows, form validation, and page behavior.
-- Organize reusable browser interactions with the Page Object Model.
-- Keep test scripts and execution evidence maintainable.
+Proyek ini menerapkan metode **Page Object Model (POM)** untuk memisahkan elemen halaman, locator, dan interaksi dengan skenario pengujian sehingga kode lebih terstruktur, mudah digunakan kembali, dan dipelihara.
 
-## Tools and Technologies
+## 2. Tujuan Pengujian
 
-- JavaScript
-- Node.js
-- Playwright
-- Page Object Model (POM)
-- Git and GitHub
-- Jira Cloud (test documentation and tracking)
+- Mengotomatisasi pengujian fungsional pada aplikasi E-Raport.
+- Memastikan fitur aplikasi berjalan sesuai dengan yang diharapkan.
+- Menguji validasi input dan proses pengolahan data.
+- Mengidentifikasi kesalahan atau ketidaksesuaian fungsi aplikasi.
+- Menerapkan metode Page Object Model dalam pembuatan script automation testing.
+- Mendokumentasikan hasil pengujian sebagai bukti proses Quality Assurance.
 
-## Project Structure
+## 3. Tools dan Teknologi
+
+| Tools | Kegunaan |
+|---|---|
+| JavaScript | Bahasa pemrograman |
+| Playwright | Framework automation testing |
+| Node.js | Menjalankan JavaScript |
+| Visual Studio Code | Editor kode |
+| Git & GitHub | Version control dan penyimpanan proyek |
+| Jira Cloud | Dokumentasi dan pengelolaan task pengujian |
+
+## 4. Metode Pengujian
+
+Proyek ini menggunakan pendekatan **Page Object Model (POM)**.
+
+Penerapan POM dilakukan dengan memisahkan:
+
+- **Pages:** Menyimpan locator dan fungsi interaksi pada setiap halaman aplikasi.
+- **Tests:** Menyimpan skenario pengujian dan assertion untuk memvalidasi hasil pengujian.
+
+Pendekatan ini membantu membuat script pengujian lebih terorganisasi dan mudah dikembangkan.
+
+## 5. Struktur Folder Proyek
 
 ```text
 e-raport-automation/
+│
 ├── pages/
 │   ├── AkunPage.js
 │   ├── DashboardPage.js
@@ -34,6 +54,7 @@ e-raport-automation/
 │   ├── MapelPage.js
 │   ├── NilaiPage.js
 │   └── SiswaPage.js
+│
 ├── tests/
 │   ├── akun/
 │   ├── dashboard/
@@ -42,110 +63,138 @@ e-raport-automation/
 │   ├── mapel/
 │   ├── Nilai/
 │   └── siswa/
+│
 ├── playwright.config.js
 ├── package.json
 └── package-lock.json
 ```
 
-## Test Coverage
+## 6. Cakupan Pengujian (Test Coverage)
 
-The following 32 test cases have been reported as passing in the project test runs shared during development:
+Berikut modul yang telah berhasil menjalani pengujian otomatis:
 
-| Module | Passing test cases |
-|---|---:|
-| Mata Pelajaran (Subjects) | 8 |
-| Akun Pengguna (User Accounts) | 8 |
-| Siswa (Students) | 8 |
-| Nilai (Grades) | 8 |
-| **Total** | **32** |
+| Modul | Jumlah Test Case | Hasil |
+|---|---:|---|
+| Mata Pelajaran | 8 | PASS |
+| Kelola Akun | 8 | PASS |
+| Data Siswa | 8 | PASS |
+| Rekap Nilai | 8 | PASS |
+| **Total** | **32** | **PASS** |
 
-Additional test specifications exist for Dashboard, Guru, and Laporan. Their full execution results have not yet been confirmed for this portfolio summary.
+Catatan: Hasil di atas berdasarkan eksekusi pengujian yang telah dilakukan selama pengembangan proyek.
 
-## Example Scenarios
+Terdapat tambahan script pengujian untuk modul Dashboard, Guru, dan Laporan. Hasil keseluruhan ketiga modul tersebut masih perlu diverifikasi.
 
-- Verify that module pages and their main elements are visible.
-- Verify table headers and displayed records.
-- Validate required form fields.
-- Add, edit, and delete student records.
-- Reject duplicate student identification numbers (NIS).
-- Select subjects assigned to a teacher.
-- Validate grade inputs and grade calculations.
-- Apply semester filters.
-- Verify user-account management actions.
+## 7. Contoh Skenario Pengujian
 
-## Getting Started
+Beberapa skenario yang diterapkan dalam proyek ini:
 
-### Prerequisites
+- Memastikan halaman aplikasi berhasil ditampilkan.
+- Memastikan tabel dan data pengguna tersedia.
+- Memvalidasi input form yang wajib diisi.
+- Menguji proses tambah, edit, dan hapus data siswa.
+- Menguji validasi NIS duplikat.
+- Memastikan checkbox mata pelajaran dapat dipilih.
+- Menguji input dan perhitungan nilai akhir.
+- Menguji filter semester.
+- Memastikan fungsi pengelolaan akun berjalan sesuai kebutuhan.
 
-- Node.js and npm
-- The E-Raport application running locally
-- Valid test accounts for the required roles
+## 8. Cara Menjalankan Pengujian
 
-### Installation
+### A. Persyaratan
 
-Clone the repository:
+Sebelum menjalankan pengujian, pastikan sudah tersedia:
+
+- Node.js dan npm.
+- Aplikasi E-Raport yang berjalan secara lokal.
+- Akun pengujian untuk Admin dan Guru.
+
+### B. Clone Repository
 
 ```bash
 git clone https://github.com/ermilaamanda102/e-raport-automation.git
 cd e-raport-automation
 ```
 
-Install dependencies and the Chromium browser:
+### C. Instalasi Dependensi
 
 ```bash
 npm install
+```
+
+Instal browser Chromium:
+
+```bash
 npx playwright install chromium
 ```
 
-### Configure test credentials
+### D. Konfigurasi Akun Pengujian
 
-Set credentials in PowerShell before running tests. Use your own local test accounts; do not commit credentials to Git.
+Atur kredensial melalui PowerShell:
 
 ```powershell
-$env:ADMIN_USERNAME="your_admin_username"
-$env:ADMIN_PASSWORD="your_admin_password"
-$env:GURU_USERNAME="your_teacher_username"
-$env:GURU_PASSWORD="your_teacher_password"
+$env:ADMIN_USERNAME="username_admin"
+$env:ADMIN_PASSWORD="password_admin"
+
+$env:GURU_USERNAME="username_guru"
+$env:GURU_PASSWORD="password_guru"
 ```
 
-### Run tests
+Gunakan akun pengujian lokal dan jangan mengunggah password ke repository GitHub.
 
-Run all tests in Chromium:
+### E. Menjalankan Pengujian
+
+Menjalankan seluruh test:
 
 ```bash
 npx playwright test --project=chromium
 ```
 
-Run one module:
+Menjalankan pengujian modul Mata Pelajaran:
 
 ```bash
 npx playwright test tests/mapel/mapel-pom.spec.js --project=chromium
 ```
 
-Run with the browser visible and one worker:
+Menjalankan pengujian dengan browser terlihat:
 
 ```bash
 npx playwright test --headed --workers=1 --project=chromium
 ```
 
-The local E-Raport application must be running at the base URL configured in the test project before execution.
+Pastikan aplikasi E-Raport sudah berjalan pada alamat lokal yang dikonfigurasi dalam proyek sebelum menjalankan pengujian.
 
-## Playwright HTML Report
+## 9. Laporan Hasil Pengujian
 
-After a test run, open the HTML report with:
+Playwright menyediakan laporan hasil pengujian dalam format HTML.
+
+Untuk membuka laporan:
 
 ```bash
 npx playwright show-report
 ```
 
-## Repository
+Laporan ini dapat digunakan untuk melihat status pengujian, detail test case, dan informasi pengujian yang gagal.
 
-[GitHub: ermilaamanda102/e-raport-automation](https://github.com/ermilaamanda102/e-raport-automation)
+## 10. Repository GitHub
 
-## Author
+Source code proyek dapat diakses melalui:
+
+https://github.com/ermilaamanda102/e-raport-automation
+
+## 11. Tentang Pengembang
 
 **Ermila Amanda**
 
-QA Automation Testing Portfolio Project
+Proyek ini dibuat sebagai bagian dari portofolio pembelajaran dan pengembangan keterampilan di bidang Software Quality Assurance (QA) dan Automation Testing.
 
-Skills demonstrated: Functional Testing, End-to-End Testing, Test Automation, Playwright, JavaScript, Page Object Model, Test Documentation, and Git/GitHub.
+**Kompetensi yang diterapkan:**
+- Functional Testing
+- End-to-End Testing
+- Automation Testing
+- Playwright
+- JavaScript
+- Page Object Model (POM)
+- Test Case Documentation
+- Jira Cloud
+- Git dan GitHub
