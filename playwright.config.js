@@ -3,49 +3,49 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
 
-  // Lokasi folder automation test
-  testDir: './tests',
+    // Lokasi folder automation test
+    testDir: './tests',
 
-  // Menjalankan test secara paralel
-  fullyParallel: true,
+    // Test dijalankan satu per satu
+    fullyParallel: false,
 
-  // Mencegah test.only tertinggal saat CI
-  forbidOnly: !!process.env.CI,
+    // Mencegah test.only tertinggal saat CI
+    forbidOnly: !!process.env.CI,
 
-  // Mengulang test jika gagal saat CI
-  retries: process.env.CI ? 2 : 0,
+    // Tidak mengulang test secara otomatis
+    retries: 0,
 
-  // Jumlah worker
-  workers: process.env.CI ? 1 : undefined,
+    // Menggunakan satu worker
+    workers: 1,
 
-  // Membuat laporan HTML
-  reporter: 'html',
+    // Membuat laporan HTML
+    reporter: 'html',
 
-  // Konfigurasi browser
-  use: {
-    baseURL: 'http://localhost:8080',
+    // Konfigurasi browser
+   use: {
+   baseURL: 'http://localhost/e-raport/public/',
 
-    // Browser ditampilkan saat test berjalan
-    headless: false,
+        // Browser ditampilkan
+        headless: false,
 
-    // Mengambil trace jika test gagal dan diulang
-    trace: 'on-first-retry',
+        // Screenshot jika gagal
+        screenshot: 'only-on-failure',
 
-    // Mengambil screenshot jika test gagal
-    screenshot: 'only-on-failure',
+        // Video jika gagal
+        video: 'retain-on-failure',
 
-    // Merekam video jika test gagal
-    video: 'retain-on-failure',
-  },
-
-  // Hanya menggunakan Chromium
-  projects: [
-    {
-      name: 'chromium',
-      use: {
-        ...devices['Desktop Chrome'],
-      },
+        // Trace jika gagal
+        trace: 'retain-on-failure',
     },
-  ],
+
+    // Hanya menggunakan Chromium
+    projects: [
+        {
+            name: 'chromium',
+            use: {
+                ...devices['Desktop Chrome'],
+            },
+        },
+    ],
 
 });

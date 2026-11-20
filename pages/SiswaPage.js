@@ -1,90 +1,123 @@
 
-class SiswaPage {
+const { expect } = require('@playwright/test');
 
+const BASE_URL = 'http://localhost/e-raport/public';
+
+class SiswaPage {
     constructor(page) {
         this.page = page;
 
-        this.nisInput = page.locator('input[name="NIS"]');
-        this.namaInput = page.locator('input[name="nama"]');
-        this.kelasInput = page.locator('input[name="kelas"]');
+        this.judul = page.locator('.card-custom-header h5');
+        this.tabel = page.locator('table.table');
+        this.baris = page.locator('table.table tbody tr');
 
-        this.jenisKelaminSelect = page.locator(
-            'select[name="jenis_kelamin"]'
-        );
-
-        this.simpanButton = page.getByRole('button', {
-            name: 'Simpan'
+        this.tombolTambah = page.getByRole('link', {
+            name: /Tambah Siswa/i
         });
 
-        this.table = page.locator('table');
-    }
+        this.inputNIS = page.locator('input[name="NIS"]');
+        this.inputNama = page.locator('input[name="nama"]');
+        this.inputKelas = page.locator('input[name="kelas"]');
+        this.selectJK = page.locator('select[name="jenis_kelamin"]');
 
-    // Membuka halaman Data Siswa
-    async open() {
-        await this.page.goto(
-            'http://localhost/e-raport/public/admin/siswa'
+        this.tombolSimpan = page.locator(
+            'button[type="submit"]'
         );
+
+        this.tombolBatal = page.getByRole('link', {
+            name: /Batal/i
+        });
     }
 
-    // Membuka form Tambah Siswa
-    async openTambah() {
-        await this.page.goto(
-            'http://localhost/e-raport/public/admin/siswa/tambah'
-        );
+    async bukaHalaman() {
+        await this.page.goto(`${BASE_URL}/admin/siswa`, {
+            waitUntil: 'commit',
+            timeout: 60000
+        });
+
+        await expect(this.judul).toContainText(/Data Siswa/i);
+
+        console.log('Halaman Data Siswa berhasil dibuka');
     }
 
-    // Mengisi form siswa
+    async verifikasiHalaman() {
+        await expect(this.judul).toBeVisible();
+        await expect(this.tabel).toBeVisible();
+        await expect(this.tombolTambah).toBeVisible();
+
+        console.log('Halaman Data Siswa berhasil ditampilkan');
+    }
+
+    async bukaFormTambah() {
+        await this.tombolTambah.click();
+
+        await expect(this.judul).toContainText(/Tambah Siswa/i);
+        await expect(this.inputNIS).toBeVisible();
+
+        console.log('Form Tambah Siswa berhasil dibuka');
+    }
+
+    async verifikasiForm() {
+        await expect(this.inputNIS).toBeVisible();
+        await expect(this.inputNama).toBeVisible();
+        await expect(this.inputKelas).toBeVisible();
+        await expect(this.selectJK).toBeVisible();
+        await expect(this.tombolSimpan).toBeVisible();
+        await expect(this.tombolBatal).toBeVisible();
+    }
+
     async isiForm(data) {
-        await this.nisInput.fill(data.nis);
-        await this.namaInput.fill(data.nama);
-        await this.kelasInput.fill(data.kelas);
-
-        await this.jenisKelaminSelect.selectOption(
-            data.jenisKelamin
-        );
+        await this.inputNIS.fill(data.NIS);
+        await this.inputNama.fill(data.nama);
+        await this.inputKelas.fill(data.kelas);
+        await this.selectJK.selectOption(data.jenis_kelamin);
     }
 
-    // Menyimpan data siswa
     async simpan() {
-        await this.simpanButton.click();
+        await Promise.all([
+            this.page.waitForURL(
+                url => url.pathname.endsWith('/admin/siswa'),
+                { waitUntil: 'commit', timeout: 30000 }
+            ),
+            this.tombolSimpan.click()
+        ]);
     }
 
-    // Mencari baris siswa berdasarkan NIS
-    cariBaris(nis) {
-        return this.page.getByRole('row').filter({
-            has: this.page.getByRole('cell', {
-                name: nis,
-                exact: true
-            })
-        });
+    async cariSiswa(nis) {
+        return this.page.locator('table.table tbody tr')
+            .filter({ hasText: nis });
     }
 
-    // Membuka halaman Edit Siswa
     async bukaEdit(nis) {
-        const baris = this.cariBaris(nis);
+        const baris = await this.cariSiswa(nis);
+
+        await expect(baris).toHaveCount(1);
 
         await baris.locator(
             'a[href*="/admin/siswa/edit/"]'
         ).click();
+
+        await expect(this.judul).toContainText(/Edit Siswa/i);
     }
 
-    // Mengubah nama dan kelas
-    async updateData(nama, kelas) {
-        await this.namaInput.fill(nama);
-        await this.kelasInput.fill(kelas);
-
+    async editSiswa(data) {
+        await this.isiForm(data);
         await this.simpan();
     }
 
-    // Menghapus siswa
-    async hapus(nis) {
-        const baris = this.cariBaris(nis);
+    async hapusSiswa(nis) {
+        const baris = await this.cariSiswa(nis);
+
+        await expect(baris).toHaveCount(1);
 
         this.page.once('dialog', dialog => dialog.accept());
 
-        await baris.locator('i.bi-trash').locator('..').click();
-    }
+        await baris.locator(
+            'a[href*="/admin/siswa/hapus/"]'
+        ).click();
 
+        await expect(baris).toHaveCount(0);
+    }
 }
 
 module.exports = { SiswaPage };
